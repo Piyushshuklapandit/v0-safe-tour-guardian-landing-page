@@ -43,7 +43,7 @@ export function AuthModal({ isOpen, onClose, mode, onModeChange }: AuthModalProp
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Shield className="h-5 w-5 text-primary" />
-            <span>{mode === "signin" ? "Sign In" : "Sign Up"} to SafeTour Guardian</span>
+            <span>{mode === "signin" ? "Sign In" : "Sign Up"} to TravoMate</span>
           </DialogTitle>
         </DialogHeader>
 

@@ -90,8 +90,7 @@ export function StakeholderBenefitsSection() {
           </Badge>
           <h2 className="text-4xl font-bold font-serif mb-4 gradient-text-india">Benefits for Every Stakeholder</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            SafeTour Guardian creates value across the entire tourism ecosystem, from government agencies to local
-            communities.
+            TravoMate creates value across the entire tourism ecosystem, from government agencies to local communities.
           </p>
         </div>
 

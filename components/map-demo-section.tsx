@@ -57,7 +57,7 @@ export function MapDemoSection() {
             Interactive Demo
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 text-balance">
-            See SafeTour Guardian in Action
+            See TravoMate in Action
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
             Watch how our real-time monitoring system protects tourists with intelligent geo-fencing and instant

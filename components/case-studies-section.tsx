@@ -65,7 +65,7 @@ export function CaseStudiesSection() {
           </Badge>
           <h2 className="text-4xl font-bold font-serif mb-4 gradient-text-india">Pilot Project Success Stories</h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Real-world implementations across India showcasing the effectiveness of SafeTour Guardian in diverse tourism
+            Real-world implementations across India showcasing the effectiveness of TravoMate in diverse tourism
             environments.
           </p>
         </div>

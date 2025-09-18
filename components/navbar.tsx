@@ -3,10 +3,12 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { Menu, Shield, Moon, Sun, Volume2 } from "lucide-react"
+import { Menu, Moon, Sun, Volume2, AlertTriangle } from "lucide-react"
 import { useTheme } from "next-themes"
 import { AuthModal } from "@/components/auth-modal"
 import { LanguageToggle } from "@/components/language-toggle"
+import Image from "next/image"
+import Link from "next/link"
 
 export function Navbar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
@@ -20,6 +22,8 @@ export function Navbar() {
     { name: "Case Studies", href: "#case-studies" },
     { name: "Benefits", href: "#benefits" },
     { name: "Team", href: "#team" },
+    { name: "TourFriend", href: "/tourfriend" },
+    { name: "SOS", href: "/sos", isEmergency: true },
     { name: "Contact", href: "#contact" },
   ]
 
@@ -33,12 +37,14 @@ export function Navbar() {
       <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 glass-morphism">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <div className="relative">
-                <Shield className="h-8 w-8 text-[color:var(--india-blue)]" />
+                <Image src="/travomate-logo.png" alt="TravoMate Logo" width={40} height={40} className="rounded-full" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-[color:var(--india-saffron)] rounded-full animate-pulse-glow"></div>
               </div>
-              <span className="text-xl font-bold font-serif gradient-text-india">SafeTour Guardian</span>
+              <Link href="/" className="text-xl font-bold font-serif gradient-text-india">
+                TravoMate
+              </Link>
               <div className="hidden sm:flex items-center space-x-1 text-xs text-muted-foreground">
                 <span>•</span>
                 <span className="text-[color:var(--digital-india)]">Digital India</span>
@@ -47,16 +53,41 @@ export function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              {navItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-[color:var(--india-blue)] transition-colors relative group"
-                >
-                  {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[color:var(--india-saffron)] transition-all group-hover:w-full"></span>
-                </a>
-              ))}
+              {navItems.map((item) =>
+                item.href.startsWith("#") ? (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={`text-sm font-medium text-muted-foreground hover:text-[color:var(--india-blue)] transition-colors relative group ${
+                      item.isEmergency ? "text-red-600 hover:text-red-700 font-bold" : ""
+                    }`}
+                  >
+                    {item.isEmergency && <AlertTriangle className="w-4 h-4 inline mr-1" />}
+                    {item.name}
+                    <span
+                      className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-[color:var(--india-saffron)] transition-all group-hover:w-full ${
+                        item.isEmergency ? "bg-red-500" : ""
+                      }`}
+                    ></span>
+                  </a>
+                ) : (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`text-sm font-medium text-muted-foreground hover:text-[color:var(--india-blue)] transition-colors relative group ${
+                      item.isEmergency ? "text-red-600 hover:text-red-700 font-bold" : ""
+                    }`}
+                  >
+                    {item.isEmergency && <AlertTriangle className="w-4 h-4 inline mr-1" />}
+                    {item.name}
+                    <span
+                      className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-[color:var(--india-saffron)] transition-all group-hover:w-full ${
+                        item.isEmergency ? "bg-red-500" : ""
+                      }`}
+                    ></span>
+                  </Link>
+                ),
+              )}
             </div>
 
             <div className="hidden md:flex items-center space-x-4">
@@ -90,15 +121,31 @@ export function Navbar() {
                 </SheetTrigger>
                 <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                   <div className="flex flex-col space-y-4 mt-8">
-                    {navItems.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
-                      >
-                        {item.name}
-                      </a>
-                    ))}
+                    {navItems.map((item) =>
+                      item.href.startsWith("#") ? (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className={`text-lg font-medium text-muted-foreground hover:text-foreground transition-colors ${
+                            item.isEmergency ? "text-red-600 hover:text-red-700 font-bold" : ""
+                          }`}
+                        >
+                          {item.isEmergency && <AlertTriangle className="w-4 h-4 inline mr-2" />}
+                          {item.name}
+                        </a>
+                      ) : (
+                        <Link
+                          key={item.name}
+                          href={item.href}
+                          className={`text-lg font-medium text-muted-foreground hover:text-foreground transition-colors ${
+                            item.isEmergency ? "text-red-600 hover:text-red-700 font-bold" : ""
+                          }`}
+                        >
+                          {item.isEmergency && <AlertTriangle className="w-4 h-4 inline mr-2" />}
+                          {item.name}
+                        </Link>
+                      ),
+                    )}
                     <div className="flex flex-col space-y-2 pt-4 border-t">
                       <LanguageToggle />
                       <Button variant="ghost" onClick={() => openAuthModal("signin")}>

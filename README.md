@@ -1,4 +1,4 @@
-# SafeTour Guardian landing page
+# TravoMate landing page
 
 *Automatically synced with your [v0.app](https://v0.app) deployments*
 

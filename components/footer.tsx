@@ -2,7 +2,8 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Shield, Mail, Phone, MapPin, Linkedin, Twitter, Github, ArrowRight } from "lucide-react"
+import { Mail, Phone, MapPin, Linkedin, Twitter, Github, ArrowRight } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -13,13 +14,14 @@ export function Footer() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
             {/* Company Info */}
             <div className="lg:col-span-1">
-              <div className="flex items-center space-x-2 mb-6">
-                <Shield className="h-8 w-8 text-primary" />
-                <span className="text-xl font-bold text-foreground">SafeTour Guardian</span>
+              <div className="flex items-center space-x-3 mb-6">
+                <Image src="/travomate-logo.jpg" alt="TravoMate Logo" width={32} height={32} className="rounded-full" />
+                <span className="text-xl font-bold text-foreground">TravoMate</span>
               </div>
               <p className="text-muted-foreground mb-6 text-pretty">
                 Revolutionizing tourist safety through AI-powered geo-fencing, blockchain identity, and emergency
-                response systems.
+                response systems. Real-world implementations across India showcasing the effectiveness of TravoMate in
+                diverse tourism.
               </p>
               <div className="flex space-x-4">
                 <Button variant="ghost" size="icon">
@@ -121,7 +123,7 @@ export function Footer() {
               <Mail className="h-5 w-5 text-primary" />
               <div>
                 <div className="font-medium text-foreground">Email</div>
-                <div className="text-sm text-muted-foreground">contact@safetourguardian.com</div>
+                <div className="text-sm text-muted-foreground">contact@travomate.com</div>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -145,7 +147,7 @@ export function Footer() {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-muted-foreground mb-4 md:mb-0">
-              © 2024 SafeTour Guardian. All rights reserved. Built for SIH 2024.
+              © 2024 TravoMate. All rights reserved. Built for SIH 2024.
             </div>
             <div className="flex items-center space-x-6 text-sm text-muted-foreground">
               <span>Made with ❤️ in India</span>

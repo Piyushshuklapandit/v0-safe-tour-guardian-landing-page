@@ -18,8 +18,7 @@ const storySteps = [
   {
     id: 2,
     title: "Instant Geo-fence Alert",
-    description:
-      "SafeTour Guardian immediately detects the boundary violation and sends an instant alert to Sarah's phone.",
+    description: "TravoMate immediately detects the boundary violation and sends an instant alert to Sarah's phone.",
     icon: AlertTriangle,
     color: "text-danger-red",
     bgColor: "bg-danger-red/10",
@@ -95,8 +94,8 @@ export function StorytellingSection() {
             See How We Protect Tourists
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto text-pretty">
-            Follow Sarah's journey as SafeTour Guardian transforms a potentially dangerous situation into a safe,
-            managed experience.
+            Follow Sarah's journey as TravoMate transforms a potentially dangerous situation into a safe, managed
+            experience.
           </p>
         </div>
 

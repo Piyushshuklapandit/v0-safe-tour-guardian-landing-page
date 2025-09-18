@@ -22,10 +22,10 @@ const merriweather = Merriweather({
 })
 
 export const metadata: Metadata = {
-  title: "SafeTour Guardian - Smart Tourist Safety & Incident Response System",
+  title: "TravoMate - Smart Tourist Safety & Incident Response System",
   description:
     "AI-powered tourist safety platform with geo-fencing, blockchain identity, and emergency response capabilities. Built for Smart India Hackathon.",
-  generator: "SafeTour Guardian",
+  generator: "TravoMate",
   keywords: "tourist safety, AI, blockchain, geo-fencing, emergency response, Smart India Hackathon, Digital India",
 }
 
