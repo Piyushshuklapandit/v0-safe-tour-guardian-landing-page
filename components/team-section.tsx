@@ -44,7 +44,7 @@ const teamMembers = [
   {
     name: "Payal",
     role: "Data Scientist & Analytics Expert",
-    image: "/payal-animated-profile.jpg",
+    image: "/payal-kumari-profile.png",
     bio: "Data analytics expert specializing in tourist behavior patterns and predictive safety modeling.",
     linkedin: "#",
     github: "#",

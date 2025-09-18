@@ -147,7 +147,7 @@ export function Footer() {
         <div className="py-6 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-sm text-muted-foreground mb-4 md:mb-0">
-              © 2024 TravoMate. All rights reserved. Built for SIH 2024.
+              © 2025 TravoMate. All rights reserved. Built for SIH 2025.
             </div>
             <div className="flex items-center space-x-6 text-sm text-muted-foreground">
               <span>Made with ❤️ in India</span>
