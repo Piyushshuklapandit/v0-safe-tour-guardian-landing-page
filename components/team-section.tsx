@@ -33,7 +33,7 @@ const teamMembers = [
     email: "parth@travomate.com",
   },
   {
-    name: "Priyanshu Shukla",
+    name: "Priyanshu Mishra",
     role: "Mobile App Developer",
     image: "/priyanshu-shukla-profile.png",
     bio: "Mobile application specialist developing cross-platform safety apps with real-time monitoring capabilities.",
