@@ -1,12 +1,68 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Play, Shield, Phone, MapPin, Hospital, Clock, Globe2, CheckCircle } from "lucide-react"
-import { useState } from "react"
+import {
+  ArrowRight,
+  Play,
+  Shield,
+  Phone,
+  MapPin,
+  Hospital,
+  Clock,
+  Globe2,
+  CheckCircle,
+  Map,
+  AlertTriangle,
+  Navigation,
+} from "lucide-react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 
 export function HeroSection() {
   const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [nearbyEmergencyServices, setNearbyEmergencyServices] = useState<any[]>([])
+
+  // Get user location for emergency services
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          })
+          // In production, this would fetch real emergency services
+          setNearbyEmergencyServices([
+            { type: "police", name: "Local Police Station", distance: "0.8 km", phone: "100" },
+            { type: "hospital", name: "Government Hospital", distance: "1.2 km", phone: "108" },
+            { type: "tourist", name: "Tourist Helpline", distance: "Available", phone: "1363" },
+          ])
+        },
+        (error) => {
+          console.log("Location access denied:", error)
+        },
+      )
+    }
+  }, [])
+
+  const handleEmergencyCall = (number: string) => {
+    window.open(`tel:${number}`, "_self")
+  }
+
+  const findNearestService = (type: "police" | "hospital") => {
+    if (!userLocation) {
+      alert("Location access required to find nearest services. Please enable location permissions.")
+      return
+    }
+
+    // In production, this would use real geolocation services
+    const service = nearbyEmergencyServices.find((s) => s.type === type)
+    if (service) {
+      alert(`Nearest ${type}: ${service.name} (${service.distance})`)
+    }
+  }
 
   return (
     <section
@@ -72,13 +128,16 @@ export function HeroSection() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12 animate-slide-in-up">
-            <Button
-              size="lg"
-              className="text-xl px-12 py-8 group bg-gradient-to-r from-blue-900 to-blue-800 hover:from-blue-800 hover:to-blue-700 text-white shadow-xl font-bold"
-            >
-              Get Started
-              <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link href="/safety-map">
+              <Button
+                size="lg"
+                className="text-xl px-12 py-8 group bg-gradient-to-r from-blue-900 to-blue-800 hover:from-blue-800 hover:to-blue-700 text-white shadow-xl font-bold"
+              >
+                <Map className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform" />
+                View Safety Map
+                <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
             <Button
               variant="outline"
               size="lg"
@@ -90,16 +149,16 @@ export function HeroSection() {
             </Button>
           </div>
 
-          <div className="bg-gradient-to-r from-red-50 to-red-100 border-3 border-red-300 rounded-2xl p-8 mb-12 animate-slide-in-up shadow-xl">
+          <div className="bg-gradient-to-r from-red-50 to-red-100 border-3 border-red-300 rounded-2xl p-8 mb-8 animate-slide-in-up shadow-xl">
             <h3 className="text-2xl font-bold text-red-800 mb-6 flex items-center justify-center">
               <Phone className="w-7 h-7 mr-3" />
               Emergency Quick Access
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
               <Button
                 size="lg"
-                className="bg-red-600 hover:bg-red-700 text-white py-8 px-10 text-xl font-bold shadow-xl border-2 border-red-400 hover:border-red-300 transition-all"
-                onClick={() => window.open("tel:112")}
+                className="bg-red-600 hover:bg-red-700 text-white py-8 px-10 text-xl font-bold shadow-xl border-2 border-red-400 hover:border-red-300 transition-all animate-pulse"
+                onClick={() => handleEmergencyCall("112")}
               >
                 <Phone className="w-8 h-8 mr-3" />
                 Call 112
@@ -107,6 +166,7 @@ export function HeroSection() {
               <Button
                 size="lg"
                 className="bg-blue-600 hover:bg-blue-700 text-white py-8 px-10 text-xl font-bold shadow-xl border-2 border-blue-400 hover:border-blue-300 transition-all"
+                onClick={() => findNearestService("police")}
               >
                 <MapPin className="w-8 h-8 mr-3" />
                 Nearest Police Station
@@ -114,9 +174,45 @@ export function HeroSection() {
               <Button
                 size="lg"
                 className="bg-green-600 hover:bg-green-700 text-white py-8 px-10 text-xl font-bold shadow-xl border-2 border-green-400 hover:border-green-300 transition-all"
+                onClick={() => findNearestService("hospital")}
               >
                 <Hospital className="w-8 h-8 mr-3" />
                 Nearest Hospital
+              </Button>
+            </div>
+
+            {userLocation && (
+              <div className="bg-white/80 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-center mb-3">
+                  <Navigation className="w-5 h-5 mr-2 text-green-600" />
+                  <span className="text-sm font-semibold text-slate-700">Location Services Active</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                  {nearbyEmergencyServices.map((service, index) => (
+                    <div key={index} className="flex items-center justify-between bg-white rounded p-2 shadow-sm">
+                      <span className="font-medium text-slate-700">{service.name}</span>
+                      <span className="text-slate-500">{service.distance}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link href="/sos">
+                <Button size="sm" className="bg-red-700 hover:bg-red-800 text-white font-bold border-2 border-red-500">
+                  <AlertTriangle className="w-4 h-4 mr-2" />
+                  SOS Emergency Mode
+                </Button>
+              </Link>
+              <Button
+                size="sm"
+                variant="outline"
+                className="border-blue-300 text-blue-700 hover:bg-blue-50 bg-transparent"
+                onClick={() => handleEmergencyCall("1363")}
+              >
+                <Phone className="w-4 h-4 mr-2" />
+                Tourist Helpline (1363)
               </Button>
             </div>
           </div>
