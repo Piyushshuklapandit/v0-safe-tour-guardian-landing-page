@@ -138,6 +138,22 @@ export function SafetyAlertSystem() {
     }
   }, [alerts])
 
+  //added code 
+  // Listen for global safety-alert events
+useEffect(() => {
+  const handleAlertEvent = (event: Event) => {
+    const customEvent = event as CustomEvent<Omit<SafetyAlert, "id" | "timestamp">>
+    addAlert(customEvent.detail)
+  }
+
+  window.addEventListener("safety-alert", handleAlertEvent)
+
+  return () => {
+    window.removeEventListener("safety-alert", handleAlertEvent)
+  }
+}, [])
+
+
   // Demo alerts for testing (remove in production)
   useEffect(() => {
     const timer = setTimeout(() => {
