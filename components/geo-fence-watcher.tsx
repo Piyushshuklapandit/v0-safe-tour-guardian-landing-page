@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import type { Zone } from "@/app/api/zones/route"
+import { useSafetyAlerts } from "@/components/safety-alert-system"
 
 interface GeoFenceWatcherProps {
   onZoneEnter?: (zone: Zone) => void
@@ -26,6 +27,8 @@ export function GeoFenceWatcher({ onZoneEnter, onZoneExit, onLocationUpdate, onE
 
   const watchIdRef = useRef<number | null>(null)
   const previousZonesRef = useRef<Set<string>>(new Set())
+
+  const { showZoneAlert } = useSafetyAlerts()
 
   // Fetch zones from API
   const fetchZones = async (lat?: number, lng?: number) => {
@@ -80,9 +83,9 @@ export function GeoFenceWatcher({ onZoneEnter, onZoneExit, onLocationUpdate, onE
     currentZoneIds.forEach((zoneId) => {
       if (!previousZonesRef.current.has(zoneId)) {
         const zone = zones.find((z) => z.id === zoneId)
-        if (zone && onZoneEnter) {
-          console.log("[v0] Entered zone:", zone.name)
-          onZoneEnter(zone)
+        if (zone) {
+          onZoneEnter?.(zone)
+          showZoneAlert(zone, "enter")
         }
       }
     })
@@ -91,9 +94,9 @@ export function GeoFenceWatcher({ onZoneEnter, onZoneExit, onLocationUpdate, onE
     previousZonesRef.current.forEach((zoneId) => {
       if (!currentZoneIds.has(zoneId)) {
         const zone = zones.find((z) => z.id === zoneId)
-        if (zone && onZoneExit) {
-          console.log("[v0] Exited zone:", zone.name)
-          onZoneExit(zone)
+        if (zone) {
+          onZoneExit?.(zone)
+          showZoneAlert(zone, "exit")
         }
       }
     })
@@ -196,7 +199,7 @@ export function GeoFenceWatcher({ onZoneEnter, onZoneExit, onLocationUpdate, onE
       // Fetch nearby zones when location updates
       fetchZones(currentLocation.latitude, currentLocation.longitude)
     }
-  }, [currentLocation?.latitude, currentLocation?.longitude])
+  }, [currentLocation])
 
   // This component doesn't render anything visible
   return null
@@ -208,19 +211,14 @@ export function useGeoFenceWatcher() {
   const [activeZones, setActiveZones] = useState<Zone[]>([])
   const [isWatching, setIsWatching] = useState(false)
 
+  const { showZoneAlert } = useSafetyAlerts()
+
   const handleZoneEnter = (zone: Zone) => {
-    // Trigger zone entry alert
-    if (zone.type === "restricted") {
-      // Show critical alert for restricted zones
-      showZoneAlert(zone, "enter")
-    } else {
-      // Show friendly notification for safe zones
-      showZoneNotification(zone, "enter")
-    }
+    showZoneAlert(zone, "enter")
   }
 
   const handleZoneExit = (zone: Zone) => {
-    showZoneNotification(zone, "exit")
+    showZoneAlert(zone, "exit")
   }
 
   const handleLocationUpdate = (position: GeolocationPosition) => {
@@ -244,100 +242,4 @@ export function useGeoFenceWatcher() {
       />
     ),
   }
-}
-
-// Alert functions
-function showZoneAlert(zone: Zone, action: "enter" | "exit") {
-  // Create critical alert for restricted zones
-  const alertDiv = document.createElement("div")
-  alertDiv.className = `
-    fixed top-4 left-1/2 transform -translate-x-1/2 z-50
-    bg-red-600 text-white p-4 rounded-lg shadow-lg
-    animate-pulse border-2 border-red-400
-    max-w-md w-full mx-4
-  `
-
-  alertDiv.innerHTML = `
-    <div class="flex items-center space-x-3">
-      <div class="text-2xl">⚠️</div>
-      <div>
-        <div class="font-bold text-lg">RESTRICTED ZONE ALERT</div>
-        <div class="text-sm">${zone.alertMessage || `You have ${action}ed ${zone.name}`}</div>
-        ${
-          zone.emergencyContacts
-            ? `
-          <div class="mt-2 text-xs">
-            Emergency: ${zone.emergencyContacts.join(", ")}
-          </div>
-        `
-            : ""
-        }
-      </div>
-    </div>
-  `
-
-  document.body.appendChild(alertDiv)
-
-  // Play alert sound and vibrate
-  try {
-    // Vibrate if supported
-    if (navigator.vibrate) {
-      navigator.vibrate([200, 100, 200, 100, 200])
-    }
-
-    // Play alert sound
-    const audio = new Audio(
-      "data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmGgU7k9n1unEiBC13yO/eizEIHWq+8+OWT",
-    )
-    audio.play().catch(() => {}) // Ignore errors if audio fails
-  } catch (error) {
-    console.log("[v0] Alert effects not supported:", error)
-  }
-
-  // Remove alert after 5 seconds
-  setTimeout(() => {
-    if (alertDiv.parentNode) {
-      alertDiv.parentNode.removeChild(alertDiv)
-    }
-  }, 5000)
-}
-
-function showZoneNotification(zone: Zone, action: "enter" | "exit") {
-  // Create friendly notification for safe zones
-  const notificationDiv = document.createElement("div")
-  const isEntering = action === "enter"
-  const bgColor = zone.type === "safe" ? "bg-green-600" : "bg-blue-600"
-
-  notificationDiv.className = `
-    fixed top-4 right-4 z-50
-    ${bgColor} text-white p-4 rounded-lg shadow-lg
-    transform transition-all duration-300 ease-in-out
-    max-w-sm w-full
-  `
-
-  notificationDiv.innerHTML = `
-    <div class="flex items-center space-x-3">
-      <div class="text-xl">${zone.type === "safe" ? "✅" : "📍"}</div>
-      <div>
-        <div class="font-semibold">${isEntering ? "Entered" : "Exited"} ${zone.type === "safe" ? "Safe Zone" : "Zone"}</div>
-        <div class="text-sm opacity-90">${zone.name}</div>
-        ${
-          zone.description && isEntering
-            ? `
-          <div class="text-xs opacity-75 mt-1">${zone.description}</div>
-        `
-            : ""
-        }
-      </div>
-    </div>
-  `
-
-  document.body.appendChild(notificationDiv)
-
-  // Remove notification after 4 seconds
-  setTimeout(() => {
-    if (notificationDiv.parentNode) {
-      notificationDiv.parentNode.removeChild(notificationDiv)
-    }
-  }, 4000)
 }
