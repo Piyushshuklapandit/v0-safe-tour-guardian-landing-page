@@ -2,7 +2,6 @@ import type { NextRequest } from "next/server"
 import { type RealtimeEvent, Priority, ZoneType } from "@/lib/safety-types"
 
 export const runtime = "nodejs" // ensure timers work
-export const dynamic = "force-dynamic"
 
 function sseStream(controller: ReadableStreamDefaultController, encoder: TextEncoder, ev: RealtimeEvent) {
   const payload = `id: ${ev.id}\nevent: message\ndata: ${JSON.stringify(ev)}\n\n`
