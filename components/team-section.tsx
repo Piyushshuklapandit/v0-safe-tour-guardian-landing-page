@@ -36,7 +36,8 @@ export function TeamSection() {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="flex justify-center mb-16">
+          <div className="w-full max-w-md">
           {teamMembers.map((member, index) => (
             <Card
               key={member.name}
@@ -76,6 +77,7 @@ export function TeamSection() {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
 
         {/* Team Stats */}
