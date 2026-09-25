@@ -14,51 +14,6 @@ const teamMembers = [
     github: "#",
     email: "piyush@travomate.com",
   },
-  {
-    name: "Bhamini Tiwari",
-    role: "UX/UI Designer & Frontend Developer",
-    image: "/bhamini-tiwari-profile.png",
-    bio: "Design thinking expert focused on creating intuitive safety interfaces for emergency situations and user experience.",
-    linkedin: "#",
-    github: "#",
-    email: "bhamini@travomate.com",
-  },
-  {
-    name: "Parth Shukla",
-    role: "Backend Engineer & System Architect",
-    image: "/parth-shukla-profile.png",
-    bio: "Cloud infrastructure specialist ensuring 99.9% uptime for critical safety systems and blockchain integration.",
-    linkedin: "#",
-    github: "#",
-    email: "parth@travomate.com",
-  },
-  {
-    name: "Priyanshu Mishra",
-    role: "Mobile App Developer",
-    image: "/priyanshu-shukla-profile.png",
-    bio: "Mobile application specialist developing cross-platform safety apps with real-time monitoring capabilities.",
-    linkedin: "#",
-    github: "#",
-    email: "priyanshu@travomate.com",
-  },
-  {
-    name: "Payal",
-    role: "Data Scientist & Analytics Expert",
-    image: "/payal-kumari-profile.png",
-    bio: "Data analytics expert specializing in tourist behavior patterns and predictive safety modeling.",
-    linkedin: "#",
-    github: "#",
-    email: "payal@travomate.com",
-  },
-  {
-    name: "Ashu Shukla",
-    role: "DevOps Engineer & Security Specialist",
-    image: "/ashu-shukla-profile.png",
-    bio: "DevOps and cybersecurity specialist ensuring secure deployment and infrastructure management for safety systems.",
-    linkedin: "#",
-    github: "#",
-    email: "ashu@travomate.com",
-  },
 ]
 
 export function TeamSection() {
@@ -81,7 +36,8 @@ export function TeamSection() {
         </div>
 
         {/* Team Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        <div className="flex justify-center mb-16">
+          <div className="w-full max-w-md">
           {teamMembers.map((member, index) => (
             <Card
               key={member.name}
@@ -121,6 +77,7 @@ export function TeamSection() {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
 
         {/* Team Stats */}
